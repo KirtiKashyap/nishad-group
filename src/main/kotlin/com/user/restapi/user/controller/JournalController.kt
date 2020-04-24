@@ -49,5 +49,6 @@ class JournalController(@Autowired private val journalRepository : JournalReposi
 				journalRepository.delete(it)
 				ResponseEntity<Void>(HttpStatus.OK)
 			}.orElse(ResponseEntity.notFound().build())
+	// test coommit
 
 }
