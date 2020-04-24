@@ -18,7 +18,6 @@ class UserApplication{
 		fileStorage.init()
 	}
 }
-
 fun main(args: Array<String>) {
 	runApplication<UserApplication>(*args)
 }
