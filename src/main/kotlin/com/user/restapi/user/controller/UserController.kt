@@ -1,8 +1,10 @@
 package com.user.restapi.user.controller
 
 import com.example.kotlinDemo.kotlinjournalapp.models.UserLogin
+
 import com.user.restapi.user.models.User
 import com.user.restapi.user.repository.UserRepository
+
 import org.hibernate.exception.ConstraintViolationException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.EmptyResultDataAccessException
@@ -16,6 +18,7 @@ import kotlin.collections.HashMap
 @RestController
 @RequestMapping("/api" )
 class UserController(@Autowired private val userRepository :UserRepository){
+
     //get All users
     @GetMapping("/alluser")
     fun getAllUsers() : List<User> = userRepository.findAll()
