@@ -1,5 +1,6 @@
 package com.user.restapi.user.util
 
+import com.user.restapi.user.models.User
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
