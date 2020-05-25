@@ -17,6 +17,7 @@ import kotlin.collections.HashMap
 
 @RestController
 @RequestMapping("/api" )
+
 class UserController(@Autowired private val userRepository :UserRepository){
 
     //get All users

@@ -32,6 +32,4 @@ class JwtRequestFilter (@Autowired val myUserDetailService: MyUserDetailService,
         chain.doFilter(request,response)
     }
 
-
-
 }
