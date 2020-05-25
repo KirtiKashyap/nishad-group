@@ -2,6 +2,7 @@ package com.user.restapi.user.controller
 
 import com.user.restapi.user.models.AuthenticationRequest
 import com.user.restapi.user.models.AuthenticationResponse
+import com.user.restapi.user.service.MyUserDetail
 import com.user.restapi.user.service.MyUserDetailService
 import com.user.restapi.user.util.TokenUtil
 import org.springframework.beans.factory.annotation.Autowired
@@ -10,7 +11,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -31,9 +31,10 @@ class AuthControl (@Autowired val authenticationManager: AuthenticationManager, 
         }catch (exception: Exception) {
             exception.toString()
         }
-        val userDetails: UserDetails = myUserDetailService.loadUserByUsername(authenticationRequest.username)
+        val userDetails: MyUserDetail = myUserDetailService.loadUserByUsername(authenticationRequest.username) as MyUserDetail
+
         var token: String = jwtToken.generateToken(userDetails)
-        return ResponseEntity.ok(AuthenticationResponse(token))
+        return ResponseEntity.ok(AuthenticationResponse(userDetails.user,token))
     }
 
 }
