@@ -10,15 +10,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
-import org.springframework.security.crypto.password.NoOpPasswordEncoder
-import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+
 
 @EnableWebSecurity
 class SecurityConfigurer(@Autowired val myUserDetailService : MyUserDetailService, @Autowired val jwtRequestFilter : JwtRequestFilter) : WebSecurityConfigurerAdapter() {
     override fun configure(auth: AuthenticationManagerBuilder) {
-        auth.userDetailsService(myUserDetailService)
-        //super.configure(auth)
+       auth.userDetailsService(myUserDetailService).passwordEncoder(passwordEncoder())
     }
 
     override fun configure(http: HttpSecurity) {
@@ -31,7 +30,8 @@ class SecurityConfigurer(@Autowired val myUserDetailService : MyUserDetailServic
         return super.authenticationManagerBean()
     }
     @Bean
-    fun passwordEncoder() : PasswordEncoder{
-        return NoOpPasswordEncoder.getInstance()
+    fun passwordEncoder() : BCryptPasswordEncoder{
+         return BCryptPasswordEncoder()
     }
+
 }
