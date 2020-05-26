@@ -55,5 +55,4 @@ class AuthControl (@Autowired val authenticationManager: AuthenticationManager, 
         var token: String = jwtToken.generateToken(userDetails)
         return ResponseEntity.ok(AuthenticationResponse(userDetails.user,token))
     }
-
 }
