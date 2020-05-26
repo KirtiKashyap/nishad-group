@@ -13,10 +13,12 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.provisioning.JdbcUserDetailsManager
 import org.springframework.web.bind.annotation.*
 
 @RestController
-class AuthControl (@Autowired val authenticationManager: AuthenticationManager, @Autowired val myUserDetailService : MyUserDetailService, @Autowired val jwtToken : TokenUtil){
+class AuthControl (@Autowired private  val bCryptPasswordEncoder: BCryptPasswordEncoder, @Autowired val authenticationManager: AuthenticationManager, @Autowired val myUserDetailService : MyUserDetailService, @Autowired val jwtToken : TokenUtil){
     @GetMapping("/hello")
     fun hello() : String{
         return "Hello Authentication"
@@ -44,6 +46,8 @@ class AuthControl (@Autowired val authenticationManager: AuthenticationManager, 
     fun saveUser(@RequestBody newUser: NewUser): ResponseEntity<*> {
         var user=User()
         try{
+            val encodedPassword = bCryptPasswordEncoder.encode(newUser.password)
+             newUser.password=encodedPassword
              user =myUserDetailService.save(newUser)
              authenticationManager.authenticate(UsernamePasswordAuthenticationToken(user.email, user.password))
         }catch (badceds: BadCredentialsException) {
