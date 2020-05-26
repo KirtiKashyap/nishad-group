@@ -3,6 +3,7 @@ package com.user.restapi.user.controller
 import com.user.restapi.user.models.AuthenticationRequest
 import com.user.restapi.user.models.AuthenticationResponse
 import com.user.restapi.user.models.NewUser
+import com.user.restapi.user.models.User
 import com.user.restapi.user.service.MyUserDetail
 import com.user.restapi.user.service.MyUserDetailService
 import com.user.restapi.user.util.TokenUtil
@@ -22,7 +23,7 @@ class AuthControl (@Autowired val authenticationManager: AuthenticationManager, 
     }
 
     @PostMapping("/authenticate")
-    fun testAuthenticatToken(@RequestBody authenticationRequest: AuthenticationRequest) : ResponseEntity<*> {
+    fun testAuthenticateToken(@RequestBody authenticationRequest: AuthenticationRequest) : ResponseEntity<*> {
         try {
             authenticationManager.authenticate(UsernamePasswordAuthenticationToken(authenticationRequest.username, authenticationRequest.password))
         } catch (badceds: BadCredentialsException) {
@@ -41,7 +42,18 @@ class AuthControl (@Autowired val authenticationManager: AuthenticationManager, 
     @RequestMapping(value = ["/register"], method = [RequestMethod.POST])
     @Throws(Exception::class)
     fun saveUser(@RequestBody newUser: NewUser): ResponseEntity<*> {
-        return ResponseEntity.ok(myUserDetailService.save(newUser))
+        var user=User()
+        try{
+             user =myUserDetailService.save(newUser)
+             authenticationManager.authenticate(UsernamePasswordAuthenticationToken(user.email, user.password))
+        }catch (badceds: BadCredentialsException) {
+                badceds.toString()
+        }catch (exception : Exception){
+            exception.toString()
+        }
+        val userDetails: MyUserDetail = myUserDetailService.loadUserByUsername(user.email)as MyUserDetail
+        var token: String = jwtToken.generateToken(userDetails)
+        return ResponseEntity.ok(AuthenticationResponse(userDetails.user,token))
     }
 
 }
