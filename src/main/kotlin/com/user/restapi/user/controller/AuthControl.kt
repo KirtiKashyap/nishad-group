@@ -2,6 +2,7 @@ package com.user.restapi.user.controller
 
 import com.user.restapi.user.models.AuthenticationRequest
 import com.user.restapi.user.models.AuthenticationResponse
+import com.user.restapi.user.models.NewUser
 import com.user.restapi.user.service.MyUserDetail
 import com.user.restapi.user.service.MyUserDetailService
 import com.user.restapi.user.util.TokenUtil
@@ -35,6 +36,12 @@ class AuthControl (@Autowired val authenticationManager: AuthenticationManager, 
 
         var token: String = jwtToken.generateToken(userDetails)
         return ResponseEntity.ok(AuthenticationResponse(userDetails.user,token))
+    }
+
+    @RequestMapping(value = ["/register"], method = [RequestMethod.POST])
+    @Throws(Exception::class)
+    fun saveUser(@RequestBody newUser: NewUser): ResponseEntity<*> {
+        return ResponseEntity.ok(myUserDetailService.save(newUser))
     }
 
 }

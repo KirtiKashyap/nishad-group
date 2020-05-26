@@ -22,7 +22,7 @@ class SecurityConfigurer(@Autowired val myUserDetailService : MyUserDetailServic
     }
 
     override fun configure(http: HttpSecurity) {
-        http.csrf().disable().authorizeRequests().antMatchers("/authenticate").permitAll().anyRequest().authenticated()
+        http.csrf().disable().authorizeRequests().antMatchers("/authenticate","/register").permitAll().anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         http.addFilterBefore(jwtRequestFilter,UsernamePasswordAuthenticationFilter::class.java)
     }
